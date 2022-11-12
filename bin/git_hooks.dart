@@ -11,12 +11,14 @@ void main(List<String> arguments) {
     if (arguments != null && arguments.isNotEmpty) {
       if (str == 'create') {
         //init files
-        var targetPath;
         if (arguments.length == 2) {
-          targetPath = arguments.last;
-        }
-        if (targetPath != null && targetPath.endsWith('.dart')) {
-          CreateHooks.copyFile(targetPath: targetPath);
+          if (arguments[1].endsWith('.dart')) {
+            CreateHooks.copyFile(targetPath: arguments[1]);
+          } else {
+            CreateHooks.copyFile(rootDir: arguments[1]);
+          }
+        } else if (arguments.length == 3 && arguments[2].endsWith('.dart')) {
+          CreateHooks.copyFile(rootDir: arguments[1], targetPath: arguments[2]);
         } else {
           CreateHooks.copyFile();
         }

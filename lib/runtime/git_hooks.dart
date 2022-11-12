@@ -40,8 +40,8 @@ class GitHooks {
 
   /// get target file path.
   /// returns the path that the git hooks points to.
-  static Future<String> getTargetFilePath({String path}) async {
-    return CreateHooks.getTargetFilePath();
+  static Future<String> getTargetFilePath({String rootDir}) async {
+    return CreateHooks.getTargetFilePath(rootDir: rootDir);
   }
 
   /// ```dart

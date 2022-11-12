@@ -4,7 +4,6 @@ import 'package:meta/meta.dart';
 
 /// return bool function
 typedef UserBackFun = Future<bool> Function();
-String _rootDir = Directory.current.path;
 
 /// utils class
 class Utils {
@@ -45,10 +44,11 @@ class Utils {
     return commitMsg;
   }
 
-  static String _gitHookFolder = _rootDir + '/.git/hooks/';
+  static String _gitHookFolder = '/.git/hooks/';
 
   /// get git hooks folder
-  static String get gitHookFolder => uri(_gitHookFolder);
+  static String gitHookFolder(String rootDir) =>
+      uri((rootDir ?? Directory.current.path) + _gitHookFolder);
 
   /// test create git hooks file
   @visibleForTesting
