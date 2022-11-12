@@ -5,10 +5,10 @@ import 'package:yaml/yaml.dart';
 
 import 'package:git_hooks/install/create_hooks.dart';
 
-void main(List<String> arguments) {
-  if (arguments.isNotEmpty) {
-    var str = arguments[0];
-    if (arguments != null && arguments.isNotEmpty) {
+void main(List<String>? arguments) {
+  if (arguments?.isNotEmpty ?? false) {
+    var str = arguments![0];
+    if (arguments.length <= 3) {
       if (str == 'create') {
         //init files
         if (arguments.length == 2) {
@@ -25,7 +25,7 @@ void main(List<String> arguments) {
       } else if (str == '-h' || str == '-help') {
         help();
       } else if (str == '-v' || str == '--version') {
-        var f = File(Utils.uri(Utils.getOwnPath() + '/pubspec.yaml'));
+        var f = File(Utils.uri(Utils.getOwnPath()! + '/pubspec.yaml'));
         var text = f.readAsStringSync();
         Map yaml = loadYaml(text);
         String version = yaml['version'];
@@ -39,7 +39,7 @@ void main(List<String> arguments) {
       }
     } else {
       print(
-          'Too many positional arguments: 1 expected, but ${arguments.length} found');
+          'Too many positional arguments: 2 expected, but ${arguments.length - 1} found');
       print('');
       help();
     }
@@ -53,7 +53,8 @@ void main(List<String> arguments) {
 void help() {
   print('Common commands:');
   print('');
-  print(' git_hooks create {{targetPath}}');
-  print('   Create hooks files in \'.git/hooks\'');
+  print(' git_hooks create {{rootDir}} {{targetPath}}');
+  print('   Create hooks files in \'{{rootDir}}/.git/hooks\'');
+  print('   Create hook dart runner files in \'{{targetPath}}\'');
   print('');
 }

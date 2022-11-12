@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:git_hooks/utils/logging.dart';
@@ -12,7 +11,8 @@ typedef _HooksCommandFile = Future<bool> Function(File file);
 /// install hooks
 class CreateHooks {
   /// Create files to `.git/hooks` and [targetPath]
-  static Future<bool> copyFile({String rootDir, String targetPath}) async {
+  static Future<bool> copyFile({String? rootDir, String? targetPath}) async {
+    rootDir ??= Directory.current.path;
     if (targetPath == null) {
       targetPath = 'git_hooks.dart';
     } else {
@@ -21,16 +21,14 @@ class CreateHooks {
         exit(1);
       }
     }
-    final _rootDir = rootDir ?? Directory.current.path;
-    log('ROOT: $_rootDir');
-    var relativePath = '${_rootDir}/${targetPath}';
-    var hookFile = File(Utils.uri(absolute(_rootDir, relativePath)));
+    var relativePath = '${rootDir}/${targetPath}';
+    var hookFile = File(Utils.uri(absolute(rootDir, relativePath)));
     var logger = Logger.standard();
     try {
       var commonStr = commonHook(Utils.uri(targetPath));
       commonStr = createHeader() + commonStr;
       var progress = logger.progress('create files');
-      await _hooksCommand(_rootDir, (hookFile) async {
+      await _hooksCommand(rootDir, (hookFile) async {
         if (!hookFile.existsSync()) {
           await hookFile.create(recursive: true);
         }
@@ -59,13 +57,14 @@ class CreateHooks {
 
   /// get target file path.
   /// returns the path that the git hooks points to.
-  static Future<String> getTargetFilePath({String rootDir}) async {
+  static Future<String> getTargetFilePath({String? rootDir}) async {
+    rootDir ??= Directory.current.path;
     var commandPath = '';
     await _hooksCommand(rootDir, (hookFile) async {
       var hookTemplate = hookFile.readAsStringSync();
       var match =
           RegExp(r'dart\s(\S+)\s\$hookName').allMatches(hookTemplate).first;
-      commandPath = match.group(1);
+      commandPath = match.group(1) ?? '';
       return false;
     });
     return commandPath;

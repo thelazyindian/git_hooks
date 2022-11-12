@@ -13,12 +13,12 @@ class Utils {
   }
 
   /// get path of git_hooks library
-  static String getOwnPath() {
+  static String? getOwnPath() {
     var pacPath = path.fromUri(path.current + '/.packages');
     var pac = File(pacPath);
     var a = pac.readAsStringSync();
     var b = a.split('\n');
-    String resPath;
+    var resPath = '';
     b.forEach((v) {
       if (v.startsWith('git_hooks:')) {
         var index = v.indexOf(':');
@@ -47,7 +47,7 @@ class Utils {
   static String _gitHookFolder = '/.git/hooks/';
 
   /// get git hooks folder
-  static String gitHookFolder(String rootDir) =>
+  static String gitHookFolder(String? rootDir) =>
       uri((rootDir ?? Directory.current.path) + _gitHookFolder);
 
   /// test create git hooks file

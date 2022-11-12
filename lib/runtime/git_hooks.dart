@@ -11,14 +11,14 @@ class GitHooks {
 
   /// create files from dart codes.
   /// [targetPath] is the absolute path
-  static void init({String targetPath}) async {
+  static void init({String? targetPath}) async {
     await Process.run('git_hooks', ['-v']).catchError((onError) async {
       var result = await Process.run('pub', [
         'global',
         'activate',
         '--source',
         'path',
-        Utils.getOwnPath()
+        Utils.getOwnPath()!
       ]).catchError((onError) {
         print(onError);
       });
@@ -34,13 +34,11 @@ class GitHooks {
   }
 
   /// unInstall git_hooks
-  static void unInstall({String path}) async {
-    await deleteFiles();
-  }
+  static Future<void> unInstall({String? path}) => deleteFiles();
 
   /// get target file path.
   /// returns the path that the git hooks points to.
-  static Future<String> getTargetFilePath({String rootDir}) async {
+  static Future<String> getTargetFilePath({String? rootDir}) async {
     return CreateHooks.getTargetFilePath(rootDir: rootDir);
   }
 
@@ -57,7 +55,7 @@ class GitHooks {
     try {
       params.keys.forEach((userType) async {
         if (hookList[userType.toString().split('.')[1]] == type) {
-          if (!await params[userType]()) {
+          if (!await params[userType]!()) {
             exit(1);
           }
         }
