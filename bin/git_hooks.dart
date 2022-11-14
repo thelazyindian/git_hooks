@@ -39,7 +39,7 @@ void main(List<String>? arguments) {
       }
     } else {
       print(
-          'Too many positional arguments: 2 expected, but ${arguments.length - 1} found');
+          'Too many positional arguments: 3 expected, but ${arguments.length} found - ${arguments.reduce((a, b) => '$a $b')}');
       print('');
       help();
     }
